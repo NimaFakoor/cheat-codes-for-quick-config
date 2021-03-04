@@ -1,0 +1,203 @@
+
+####################################################################################
+
+#Python version switch manager
+
+
+ls /usr/bin/python*
+
+sudo update-alternatives --list python
+
+$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 2
+
+sudo update-alternatives --list python
+
+$ sudo update-alternatives --config python
+
+python -V
+
+Python 3.7.9
+
+=> 3.7.9
+
+####################################################################################
+
+#port killer
+
+
+lsof -t -i tcp:8000 | xargs kill -9
+
+
+kill 5000
+
+fuser -k 5555/tcp
+
+
+####################################################################################
+
+
+MONGO
+
+https://snapcraft.io/mongo44-configurable
+
+install :
+mongo44-configurable
+MongoDB document-oriented database, Fully configurable!
+
+    https://github.com/mauringo/mongo44-configurable-snap
+
+    
+     the snaps mantains data and configuration across installations:
+
+ use "mongo44-configurable.reset" to reset data and configuration    
+ use "mongo44-configurable.restore-conf" to reset configuration
+ use "mongo44-configurable.remove-data" to reset data 
+
+ restart the app fater any procedure above   
+
+#############################
+
+install mongo compass
+
+|or|
+
+***
+mongodb.mongodb-vscode
+
+advance connection
+
+####################################################################################
+
+SECRET_KEY
+
+RUN:
+
+$ python -c 'import os; print(os.urandom(16))
+
+
+'b'\x01\xaa\x03m"\x00\x08u@E\x84J\x0c\xb1\xeb\xc5'
+
+####################################################################################
+
+import mysql.connector
+
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="yourusername",
+  password="yourpassword",
+  database="mydatabase"
+)
+
+mycursor = mydb.cursor()
+
+mycursor.execute("SELECT * FROM customers")
+
+myresult = mycursor.fetchall()
+
+for x in myresult:
+  print(x)
+
+####################################################################################
+
+Many-to-Many Relationships
+If you want to use many-to-many relationships you will need to define a helper table that is used for the relationship. For this helper table it is strongly recommended to not use a model but an actual table:
+
+tags = db.Table('tags',
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True),
+    db.Column('page_id', db.Integer, db.ForeignKey('page.id'), primary_key=True)
+)
+
+class Page(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tags = db.relationship('Tag', secondary=tags, lazy='subquery',
+        backref=db.backref('pages', lazy=True))
+
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+Here we configured Page.tags to be loaded immediately after loading a Page, but using a separate query. This always results in two queries when retrieving a Page, but when querying for multiple pages you will not get additional queries.
+
+The list of pages for a tag on the other hand is something that’s rarely needed. For example, you won’t need that list when retrieving the tags for a specific page. Therefore, the backref is set to be lazy-loaded so that accessing it for the first time will trigger a query to get the list of pages for that tag. If you need to apply further query options on that list, you could either switch to the 'dynamic' strategy - with the drawbacks mentioned above - or get a query object using Page.query.with_parent(some_tag) and then use it exactly as you would with the query object from a dynamic relationship.
+
+####################################################################################
+
+Querying Records
+So how do we get data back out of our database? For this purpose Flask-SQLAlchemy provides a query attribute on your Model class. When you access it you will get back a new query object over all records. You can then use methods like filter() to filter the records before you fire the select with all() or first(). If you want to go by primary key you can also use get().
+
+The following queries assume following entries in the database:
+
+id
+
+username
+
+email
+
+1
+
+admin
+
+admin@example.com
+
+2
+
+peter
+
+peter@example.org
+
+3
+
+guest
+
+guest@example.com
+
+Retrieve a user by username:
+
+>>> peter = User.query.filter_by(username='peter').first()
+>>> peter.id
+2
+>>> peter.email
+u'peter@example.org'
+Same as above but for a non existing username gives None:
+
+>>> missing = User.query.filter_by(username='missing').first()
+>>> missing is None
+True
+Selecting a bunch of users by a more complex expression:
+
+>>> User.query.filter(User.email.endswith('@example.com')).all()
+[<User u'admin'>, <User u'guest'>]
+Ordering users by something:
+
+>>> User.query.order_by(User.username).all()
+[<User u'admin'>, <User u'guest'>, <User u'peter'>]
+Limiting users:
+
+>>> User.query.limit(1).all()
+[<User u'admin'>]
+Getting user by primary key:
+
+>>> User.query.get(1)
+<User u'admin'>
+
+####################################################################################
+
+SELECT * FROM user ORDER BY popularity DESC, date_created DESC LIMIT 10
+In SQLAlchemy, for a single one this works:
+
+User.query.order_by(User.popularity.desc()).limit(10).all()
+
+=>
+User.query.order_by(User.popularity.desc(),User.date_created.desc()).limit(10).all()
+####################################################################################
+
+SQLAlchemy database update
+
+https://stackoverflow.com/questions/6699360/flask-sqlalchemy-update-a-rows-information
+
+####################################################################################
+
+Pytelegrambotapi
+
+https://awesomeopensource.com/project/eternnoir/pyTelegramBotAPI
+
+####################################################################################
